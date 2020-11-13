@@ -1,0 +1,27 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+
+matplotlib.rcParams['font.family'] = 'Malgun Gothic' 
+matplotlib.rcParams['axes.unicode_minus'] = False
+
+%matplotlib inline
+
+data = pd.read_csv('/Users/rokit/data/k-economy.csv', encoding='CP949')
+data.columns = ['년/월', '경제성장률(%)', '근원인플레이션율(%)', '아파트매매가격등락률(서울-%)', '종합주가지수']
+data = data[3:]
+data.set_index('년/월', inplace=True)
+
+data.isnull().sum()
+cor_data = data.fillna(0)
+
+cor_data['종합주가지수'] = cor_data['종합주가지수'].str.replace(',', '').astype(float)
+cor_data = cor_data.apply(pd.to_numeric)
+
+cor_data2 = cor_data.drop('종합주가지수', axis=1)
+
+cor_data2.plot(figsize=(17,8),grid = True)
+plt.xlabel('년/월', fontsize=15)
+plt.ylabel('%', fontsize=15)
+plt.show()
